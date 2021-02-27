@@ -62,8 +62,8 @@ def download_url(url, save_dir, md5=None, force=False, verbose=True):
     filename = re.sub('\\?dl=1$', '', filename)  # Remove the Dropbox 'force download' parameter
     destination_path = os.path.join(save_dir, filename)
 
-    if verbose:
-        print(f'Downloading {url} to {destination_path}...')
+    #if verbose:
+    print(f'Downloading {url} to {destination_path}...')
 
     # Check to see if file already exists, if so, simply return (quietly) unless force=True, in which case we remove
     # destination file and download fresh copy.
