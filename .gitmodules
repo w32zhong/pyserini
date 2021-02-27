@@ -1,3 +1,3 @@
 [submodule "tools"]
 	path = tools
-	url = https://github.com/castorini/anserini-tools.git
+	url = https://hub.fastgit.org/castorini/anserini-tools.git

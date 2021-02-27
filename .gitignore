@@ -1,6 +1,7 @@
 *~
 .DS_Store
 .idea
+*.pyc
 __pycache__
 pyserini/resources/jars/*.jar
 collections/*
