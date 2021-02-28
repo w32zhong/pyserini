@@ -452,11 +452,11 @@ MINDEX_INFO = {
     "tiny-mse": {
         "description": "Tiny toy math Q&A corpus from Math StackExchange",
         "urls": [
-            "",
+            "https://filebin.net/h6hfx6c1xvtcyq1t/tiny-mse.tar.gz?t=n746jf5q",
         ],
-        "md5": "",
-        "size compressed (bytes)": 0,
-        "documents": 0,
+        "md5": "cb54659c7059dff42935eb67fb953dc1",
+        "size compressed (bytes)": 686925,
+        "documents": 68,
         "downloaded": False
     },
     "ntcir12-wiki": {

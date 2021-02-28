@@ -28,8 +28,8 @@ if __name__ == '__main__':
         help="Mixed type of keywords, math keywords are written in TeX and wrapped up in dollars")
     parser.add_argument('--docid', type=int, required=False,
         help="Lookup a raw document from index")
-    parser.add_argument('--index-path', type=str, required=True,
-        help="Open index at specified path")
+    parser.add_argument('--index', type=str, required=False,
+        help="Open index at specified path or from a prebuilt index")
     parser.add_argument('--topk', type=int, required=False,
         help="Keep at most top-K hits in results")
     parser.add_argument('--trec-output', type=str, required=False,
@@ -37,20 +37,22 @@ if __name__ == '__main__':
     parser.add_argument('--verbose', required=False, action='store_true',
         help="Verbose output (showing query structures and merge times)")
     parser.add_argument('--list-prebuilt-indexes', required=False,
-        action='store_true', help="List available math prebuilt indexes")
+        action='store_true', help="List available prebuilt math indexes and abort")
 
     args = parser.parse_args()
     #print(args)
 
     if (args.list_prebuilt_indexes):
         MathSearcher.list_prebuilt_indexes()
+        exit(0)
 
     # create searcher from specified index path
-    if not os.path.exists(args.index_path):
-        print(f'Error: Path {args.index_path} does not exist.')
-        exit(1)
-
-    searcher = MathSearcher(args.index_path)
+    if not os.path.exists(args.index):
+        searcher = MathSearcher.from_prebuilt_index(args.index)
+        if searcher is None: # if index name is not registered
+            exit(1)
+    else:
+        searcher = MathSearcher(args.index)
 
     if args.query:
         # parser queries by different types

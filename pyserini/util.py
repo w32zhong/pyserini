@@ -59,7 +59,7 @@ def compute_md5(file, block_size=2**20):
 
 def download_url(url, save_dir, md5=None, force=False, verbose=True):
     filename = url.split('/')[-1]
-    filename = re.sub('\\?dl=1$', '', filename)  # Remove the Dropbox 'force download' parameter
+    filename = filename.split('?')[0] # Remove URI parameters
     destination_path = os.path.join(save_dir, filename)
 
     #if verbose:
@@ -94,6 +94,7 @@ def get_cache_home():
 
 def download_and_unpack_index(url, index_directory='indexes', force=False, verbose=True, prebuilt=False, md5=None):
     index_name = url.split('/')[-1]
+    index_name = index_name.split('?')[0]
     index_name = re.sub('''.tar.gz.*$''', '', index_name)
 
     if prebuilt:
@@ -185,12 +186,17 @@ def get_math_indexes_info():
         print(df)
 
 def download_prebuilt_index(index_name, force=False, verbose=True, mirror=None):
-    if index_name not in INDEX_INFO and index_name not in DINDEX_INFO:
+    if (index_name not in INDEX_INFO and
+        index_name not in DINDEX_INFO and
+        index_name not in MINDEX_INFO):
         raise ValueError(f'Unrecognized index name {index_name}')
     if index_name in INDEX_INFO:
         target_index = INDEX_INFO[index_name]
-    else:
+    elif index_name in DINDEX_INFO:
         target_index = DINDEX_INFO[index_name]
+    else:
+        target_index = MINDEX_INFO[index_name]
+
     index_md5 = target_index['md5']
     for url in target_index['urls']:
         try:
