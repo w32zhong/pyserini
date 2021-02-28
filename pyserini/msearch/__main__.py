@@ -24,8 +24,10 @@ from pyserini.msearch import MathSearcher
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Conduct math-aware search using Approach0 search engine')
 
-    parser.add_argument('--query', type=str, required=True, nargs='+',
+    parser.add_argument('--query', type=str, required=False, nargs='+',
         help="Mixed type of keywords, math keywords are written in TeX and wrapped up in dollars")
+    parser.add_argument('--docid', type=int, required=False,
+        help="Lookup a raw document from index")
     parser.add_argument('--index-path', type=str, required=True,
         help="Open index at specified path")
     parser.add_argument('--topk', type=int, required=False,
@@ -39,45 +41,54 @@ if __name__ == '__main__':
     #print(args)
 
     # create searcher from specified index path
-#ssearcher = SimpleSearcher.from_prebuilt_index(args.sparse.index)
     if not os.path.exists(args.index_path):
         print(f'Error: Path {args.index_path} does not exist.')
         exit(1)
 
     searcher = MathSearcher(args.index_path)
 
-    # parser queries by different types
-    queries = []
-    for kw in args.query:
-        kw_type = 'term'
-        if kw.startswith('$'):
-            kw = kw.strip('$')
-            kw_type = 'tex'
-        queries.append({
-            'keyword': kw,
-            'type': kw_type
-        })
+    if args.query:
+        # parser queries by different types
+        queries = []
+        for kw in args.query:
+            kw_type = 'term'
+            if kw.startswith('$'):
+                kw = kw.strip('$')
+                kw_type = 'tex'
+            queries.append({
+                'keyword': kw,
+                'type': kw_type
+            })
 
-    # overwrite default arguments for running searcher
-#print(f'Running {args.run.topics} topics, saving to {output_path}...')
-    verbose = args.verbose if args.verbose else False
-    topk = args.topk if args.topk else 20
-    trec_output = args.trec_output if args.trec_output else '/dev/null'
+        # overwrite default arguments for running searcher
+        verbose = args.verbose if args.verbose else False
+        topk = args.topk if args.topk else 20
+        trec_output = args.trec_output if args.trec_output else '/dev/null'
 
-    # actually run query
-    results = searcher.search(queries,
-        verbose=verbose,
-        topk=topk,
-        trec_output=trec_output
-        # TREC line format: _QRY_ID_ docID url rank score runID
-    )
+        # actually run query
+        results = searcher.search(queries,
+            verbose=verbose,
+            topk=topk,
+            trec_output=trec_output
+            # TREC line format: _QRY_ID_ docID url rank score runID
+        )
 
-    # handle results
-    if results['ret_code'] == 0: # successful
-        hits = results['hits']
+        # handle results
+        if results['ret_code'] == 0: # successful
+            hits = results['hits']
+        else:
+            print(results['ret_str'])
+            exit(1)
+
+        for hit in hits:
+            print(hit)
+
+    elif args.docid:
+        url, contents = searcher.doc(args.docid)
+        print(f'--- doc#{args.docid} ---')
+        print(url)
+        print(contents)
+
     else:
-        print(results['ret_str'])
-        exit(1)
-
-    for hit in hits:
-        print(hit)
+        print('no docid or query specifed, abort.')
+        exit(0)

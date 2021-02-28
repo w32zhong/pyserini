@@ -17,9 +17,10 @@
 This module provides Pyserini's math-aware search ability from Approach0
 """
 import json
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from pya0 import index_open as math_index_open
 from pya0 import search as math_search
+from pya0 import index_lookup_doc as math_raw_doc
 
 
 class MathSearcher:
@@ -48,5 +49,5 @@ class MathSearcher:
         hits = json.loads(JSON_str)
         return hits
 
-    def doc(self, docid: int) -> str:
-        return None
+    def doc(self, docid: int) -> Tuple[str, str]:
+        return math_raw_doc(self.index, docid)
