@@ -469,5 +469,24 @@ MINDEX_INFO = {
         "documents": 0,
         "downloaded": False
     },
+    "arqmath-2020-task1": {
+        "description": "CLEF ARQMath 2020 task2",
+        "urls": [
+            "",
+        ],
+        "md5": "",
+        "size compressed (bytes)": 0,
+        "documents": 0,
+        "downloaded": False
+    },
+    "arqmath-2020-task2": {
+        "description": "CLEF ARQMath 2020 task2",
+        "urls": [
+            "",
+        ],
+        "md5": "",
+        "size compressed (bytes)": 0,
+        "documents": 0,
+        "downloaded": False
+    },
 }
-
