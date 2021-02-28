@@ -459,7 +459,7 @@ MINDEX_INFO = {
         "documents": 68,
         "downloaded": False
     },
-    "ntcir12-wiki": {
+    "ntcir12-math-browsing": {
         "description": "NTCIR-12 Wikipedia dataset",
         "urls": [
             "",

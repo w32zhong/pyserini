@@ -185,6 +185,7 @@ def get_math_indexes_info():
                            None, 'display.max_colwidth', -1, 'display.colheader_justify', 'left'):
         print(df)
 
+
 def download_prebuilt_index(index_name, force=False, verbose=True, mirror=None):
     if (index_name not in INDEX_INFO and
         index_name not in DINDEX_INFO and

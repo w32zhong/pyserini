@@ -15,5 +15,6 @@
 #
 
 from ._mathsearch import MathSearcher
-
-__all__ = ['MathSearcher']
+from ._base import gen_topics_queries, get_qrels_filepath, trec_eval
+ 
+__all__ = ['MathSearcher', 'gen_topics_queries', 'get_qrels_filepath', 'trec_eval']
