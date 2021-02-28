@@ -22,6 +22,7 @@ from pyserini.util import get_math_indexes_info, download_prebuilt_index
 from pya0 import index_open as math_index_open
 from pya0 import search as math_search
 from pya0 import index_lookup_doc as math_raw_doc
+from pya0 import index_print_summary
 
 
 class MathSearcher:
@@ -44,6 +45,9 @@ class MathSearcher:
     @staticmethod
     def list_prebuilt_indexes():
         get_math_indexes_info()
+
+    def print_index_stats(self):
+        index_print_summary(self.index)
 
     def search(self, q: List[Dict[str, str]], k: int = 10, verbose: bool = False, topk: int = 20, trec_output: str = None) -> str:
         JSON_str = math_search(self.index, q, verbose=verbose, topk=topk, trec_output=trec_output)

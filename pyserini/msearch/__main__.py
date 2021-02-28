@@ -38,6 +38,8 @@ if __name__ == '__main__':
         help="Output TREC-format results")
     parser.add_argument('--verbose', required=False, action='store_true',
         help="Verbose output (showing query structures and merge times)")
+    parser.add_argument('--print-index-stats', required=False,
+        action='store_true', help="Print index statistics and abort")
     parser.add_argument('--list-prebuilt-indexes', required=False,
         action='store_true', help="List available prebuilt math indexes and abort")
     parser.add_argument('--eval-math-collection', type=str, required=False,
@@ -59,6 +61,12 @@ if __name__ == '__main__':
             exit(1)
     else:
         searcher = MathSearcher(args.index)
+
+    # print index stats if requested
+    if args.print_index_stats:
+        print(f' --- index stats ({args.index}) ---')
+        searcher.print_index_stats()
+        exit(0)
 
     # overwrite default arguments for running searcher
     verbose = args.verbose if args.verbose else False
