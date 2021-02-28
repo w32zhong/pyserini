@@ -447,3 +447,27 @@ DINDEX_INFO = {
         "downloaded": False
     },
 }
+
+MINDEX_INFO = {
+    "tiny-mse": {
+        "description": "Tiny toy math Q&A corpus from Math StackExchange",
+        "urls": [
+            "",
+        ],
+        "md5": "",
+        "size compressed (bytes)": 0,
+        "documents": 0,
+        "downloaded": False
+    },
+    "ntcir12-wiki": {
+        "description": "NTCIR-12 Wikipedia dataset",
+        "urls": [
+            "",
+        ],
+        "md5": "",
+        "size compressed (bytes)": 0,
+        "documents": 0,
+        "downloaded": False
+    },
+}
+

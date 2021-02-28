@@ -18,6 +18,7 @@ This module provides Pyserini's math-aware search ability from Approach0
 """
 import json
 from typing import List, Dict, Tuple
+from pyserini.util import get_math_indexes_info
 from pya0 import index_open as math_index_open
 from pya0 import search as math_search
 from pya0 import index_lookup_doc as math_raw_doc
@@ -40,9 +41,9 @@ class MathSearcher:
 #        print(f'Initializing {prebuilt_index_name}...')
 #        return cls(index_dir)
 #
-#    @staticmethod
-#    def list_prebuilt_indexes():
-#        get_sparse_indexes_info()
+    @staticmethod
+    def list_prebuilt_indexes():
+        get_math_indexes_info()
 
     def search(self, q: List[Dict[str, str]], k: int = 10, verbose: bool = False, topk: int = 20, trec_output: str = None) -> str:
         JSON_str = math_search(self.index, q, verbose=verbose, topk=topk, trec_output=trec_output)

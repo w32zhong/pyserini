@@ -36,9 +36,14 @@ if __name__ == '__main__':
         help="Output TREC-format results")
     parser.add_argument('--verbose', required=False, action='store_true',
         help="Verbose output (showing query structures and merge times)")
+    parser.add_argument('--list-prebuilt-indexes', required=False,
+        action='store_true', help="List available math prebuilt indexes")
 
     args = parser.parse_args()
     #print(args)
+
+    if (args.list_prebuilt_indexes):
+        MathSearcher.list_prebuilt_indexes()
 
     # create searcher from specified index path
     if not os.path.exists(args.index_path):
