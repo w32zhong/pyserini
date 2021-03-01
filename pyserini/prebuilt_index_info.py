@@ -459,6 +459,16 @@ MINDEX_INFO = {
         "documents": 68,
         "downloaded": False
     },
+    "mse": {
+        "description": "Math Q&A corpus used to evaluate efficiency in ECIR 2020",
+        "urls": [
+            "https://www.cs.rit.edu/~dprl/data/mse-corpus.tar.gz",
+        ],
+        "md5": "",
+        "size compressed (bytes)": 0,
+        "documents": 1000000,
+        "downloaded": False
+    },
     "ntcir12-math-browsing": {
         "description": "NTCIR-12 Wikipedia dataset",
         "urls": [
@@ -466,27 +476,30 @@ MINDEX_INFO = {
         ],
         "md5": "",
         "size compressed (bytes)": 0,
-        "documents": 0,
+        "documents": 590000,
+        "corpus_url": "https://drive.google.com/file/d/1kaNjozKJhDUnCevw4fsrmYdsw8Wixkn2/view?usp=sharing",
         "downloaded": False
     },
     "arqmath-2020-task1": {
-        "description": "CLEF ARQMath 2020 task2",
+        "description": "CLEF ARQMath 2020 task2 (posts from MSE in the years 2010 to 2018)",
         "urls": [
             "",
         ],
         "md5": "",
         "size compressed (bytes)": 0,
-        "documents": 0,
+        "documents":  1000000,
+        "corpus_url": "https://drive.google.com/file/d/1q595qXOdi1eHbC5RxMULMnbtYG4ukK3C/view?usp=sharing",
         "downloaded": False
     },
     "arqmath-2020-task2": {
-        "description": "CLEF ARQMath 2020 task2",
+        "description": "CLEF ARQMath 2020 task2 (math formulas from MSE in the years 2010 to 2018)",
         "urls": [
             "",
         ],
         "md5": "",
         "size compressed (bytes)": 0,
-        "documents": 0,
+        "documents": 28320920,
+        "corpus_url": "https://drive.google.com/file/d/1rtINvwODOK-YH79OleoVYH90X9W3m1Q_/view?usp=sharing",
         "downloaded": False
     },
 }
