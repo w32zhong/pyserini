@@ -476,8 +476,9 @@ MINDEX_INFO = {
         ],
         "md5": "",
         "size compressed (bytes)": 0,
-        "documents": 590000,
+        "documents": 591468,
         "corpus_url": "https://drive.google.com/file/d/1kaNjozKJhDUnCevw4fsrmYdsw8Wixkn2/view?usp=sharing",
+        "index_image_minimal_size": "584M",
         "downloaded": False
     },
     "arqmath-2020-task1": {
@@ -487,8 +488,9 @@ MINDEX_INFO = {
         ],
         "md5": "",
         "size compressed (bytes)": 0,
-        "documents":  1000000,
+        "documents":  1445495, # Number of posts here, there are 1 million documents though.
         "corpus_url": "https://drive.google.com/file/d/1q595qXOdi1eHbC5RxMULMnbtYG4ukK3C/view?usp=sharing",
+        "corpus_image_minimal_size": "3G",
         "downloaded": False
     },
     "arqmath-2020-task2": {
