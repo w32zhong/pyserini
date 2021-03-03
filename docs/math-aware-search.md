@@ -54,9 +54,9 @@ ls tools/topics-and-qrels/topics.ntcir12-math-browsing*
 
 To download a pre-built index and perform evaluation given `arqmath-2020-task1` as example:
 ```
-python3 -m pyserini.msearch --index arqmath-2020-task1 --eval-math-topics arqmath-2020-task1 --topk 1000 --trec-output arqmath-2020-task1.run --eval-args '-l 3'
+python3 -m pyserini.msearch --index arqmath-2020-task1 --eval-math-topics arqmath-2020-task1 --topk 1000 --trec-output arqmath-2020-task1.run --eval-args '-l 2 -J -m map'
 ```
-(here `-l 3` will be passed to `trec_eval` to generate evaluation with scores of 3 or higher considered relevant)
+(here `-l 2 -J -m map` will be passed to `trec_eval` to generate evaluation with scores of 2 or higher considered relevant and it reports results using the MAP metric over only the judged hits)
 
 To print index statistics:
 ```
