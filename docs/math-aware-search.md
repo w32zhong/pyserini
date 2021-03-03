@@ -72,3 +72,16 @@ To manually query math formulas and text keywords (you can mix different type of
 ```
 python3 -m pyserini.msearch --index arqmath-2020-task1 --query 'prove' --query '$a^2 + b^2 = c^2$'
 ```
+
+## Generate query runtimes
+Query runtimes is measured in the core engine code in order to generate accurate runtimes that do not include Python layer noises.
+
+The way to get these numbers is to collect standard output under `verbose` mode and use an utility script `collect-runtimes.sh`. Then use another script `./pyserini/msearch/calc-runtime-stats.py` to generate runtime statistics:
+```
+$ python3 -m pyserini.msearch --index arqmath-2020-task1 --eval-math-topics arqmath-2020-task1 --topk 1000 --trec-output arqmath-2020-task1.run --verbose > arqmath-2020-task1.output
+
+$ cat arqmath-2020-task1.output | ./pyserini/msearch/collect-runtimes.sh
+775,364,8,3543,756,494,838,526,738,1059,3241,1367,801,2437,1240,1214,2056,1254,813,416,43,1790,418,181,986,1809,2175,388,50,833,885,266,20,131,540,306,8,615,1216,709,643,1701,28,1065,1410,562,650,1086,2153,780,3849,564,573,365,661,568,1335,1818,1879,580,230,2315,325,861,908,229,840,417,2003,3006,748,1116,514,1626,2035,361,3498,1002,30,26,980,757,1139,1650,1474,1331,260,803,52,1208,314,532,16,1185,124,5692,647,
+
+$ python3 ./pyserini/msearch/calc-runtime-stats.py 775,364,8,3543,756,494,838,526,738,1059,3241,1367,801,2437,1240,1214,2056,1254,813,416,43,1790,418,181,986,1809,2175,388,50,833,885,266,20,131,540,306,8,615,1216,709,643,1701,28,1065,1410,562,650,1086,2153,780,3849,564,573,365,661,568,1335,1818,1879,580,230,2315,325,861,908,229,840,417,2003,3006,748,1116,514,1626,2035,361,3498,1002,30,26,980,757,1139,1650,1474,1331,260,803,52,1208,314,532,16,1185,124,5692,647, > arqmath-2020-task1.runtimes
+```
