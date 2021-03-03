@@ -42,7 +42,7 @@ if __name__ == '__main__':
         action='store_true', help="Print index statistics and abort")
     parser.add_argument('--list-prebuilt-indexes', required=False,
         action='store_true', help="List available prebuilt math indexes and abort")
-    parser.add_argument('--eval-math-collection', type=str, required=False,
+    parser.add_argument('--eval-math-topics', type=str, required=False,
         help="Evaluate TREC output using specified math collection qrels/topics")
     parser.add_argument('--eval-args', type=str, required=False,
         help="Passing extra command line arguments to trec_eval. E.g., '-q -m map -m P.30'")
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         print(url)
         print(contents)
 
-    elif args.eval_math_collection:
+    elif args.eval_math_topics:
         # preparing evaluation (determine temp file, trec_output etc.)
         if os.path.exists(trec_output):
             print(f'Truncating TREC output file {trec_output}...')
@@ -122,7 +122,7 @@ if __name__ == '__main__':
             exit(1)
 
         tmpout = tempfile.mktemp(".trec")
-        collection = args.eval_math_collection
+        collection = args.eval_math_topics
 
         # generate run file from specifed topics
         for qid, query in gen_topics_queries(collection):

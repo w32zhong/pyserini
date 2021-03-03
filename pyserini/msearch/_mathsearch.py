@@ -17,8 +17,11 @@
 This module provides Pyserini's math-aware search ability from Approach0
 """
 import json
+import os
+import subprocess
 from typing import List, Dict, Tuple
 from pyserini.util import get_math_indexes_info, download_prebuilt_index
+from pyserini.prebuilt_index_info import MINDEX_INFO
 from pya0 import index_open as math_index_open
 from pya0 import search as math_search
 from pya0 import index_lookup_doc as math_raw_doc
@@ -30,11 +33,31 @@ class MathSearcher:
         self.index_dir = index_dir
         self.index = math_index_open(index_dir, option="r")
 
+    # Approach0 index contains too many small files, it is not always possible to
+    # store it in local file system (e.g., due to inode number constraints), those
+    # indexes are wrapped in a loop-device image partitioned using some another file
+    # system different from host file system (e.g., ReiserFS). We need to mount them
+    # to access internal file index folder.
+    @classmethod
+    def mount_image_index(cls, image_path, image_fs):
+        mount_dir = os.path.dirname(image_path) + '/mnt-' + os.path.basename(image_path)
+        os.makedirs(mount_dir, exist_ok=True)
+        subprocess.run(["sudo", "umount", mount_dir])
+        subprocess.run(["sudo", "mount", "-t", image_fs, image_path, mount_dir])
+        return mount_dir
+
     @classmethod
     def from_prebuilt_index(cls, prebuilt_index_name: str):
         print(f'Attempting to initialize pre-built index {prebuilt_index_name}.')
         try:
             index_dir = download_prebuilt_index(prebuilt_index_name)
+
+            # mount index if it is a loop-device image
+            target_index = MINDEX_INFO[prebuilt_index_name]
+            if 'image_filesystem' in target_index:
+                filesystem = target_index['image_filesystem']
+                index_dir = MathSearcher.mount_image_index(index_dir, filesystem)
+
         except ValueError as e:
             print(str(e))
             return None

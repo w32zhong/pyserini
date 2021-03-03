@@ -452,30 +452,32 @@ MINDEX_INFO = {
     "tiny-mse": {
         "description": "Tiny toy math Q&A corpus from Math StackExchange",
         "urls": [
-            "https://filebin.net/h6hfx6c1xvtcyq1t/tiny-mse.tar.gz?t=n746jf5q",
+            "https://www.dropbox.com/s/z8hztzdksshrayy/tiny-mse.tar.gz?dl=1"
         ],
         "md5": "cb54659c7059dff42935eb67fb953dc1",
         "size compressed (bytes)": 686925,
         "documents": 68,
+        "corpus_url": "https://github.com/approach0/search-engine/tree/ecir2020/indexer/test-corpus/mse-small",
         "downloaded": False
     },
-    "mse": {
+    "mse-ecir2020": {
         "description": "Math Q&A corpus used to evaluate efficiency in ECIR 2020",
         "urls": [
-            "https://www.cs.rit.edu/~dprl/data/mse-corpus.tar.gz",
         ],
         "md5": "",
         "size compressed (bytes)": 0,
-        "documents": 1000000,
+        "documents": 1057449,
+        "corpus_url": "https://www.cs.rit.edu/~dprl/data/mse-corpus.tar.gz",
         "downloaded": False
     },
     "ntcir12-math-browsing": {
         "description": "NTCIR-12 Wikipedia dataset",
         "urls": [
-            "",
+            "https://www.dropbox.com/s/uhvkb8hwfjieokd/ntcir12-math-browsing.tar.gz?dl=1",
         ],
-        "md5": "",
-        "size compressed (bytes)": 0,
+        "image_filesystem": "reiserfs",
+        "md5": "c75125fb4b2614719ad4bf982e4cfd5f",
+        "size compressed (bytes)": 156128,
         "documents": 591468,
         "corpus_url": "https://drive.google.com/file/d/1kaNjozKJhDUnCevw4fsrmYdsw8Wixkn2/view?usp=sharing",
         "index_image_minimal_size": "584M",
@@ -500,8 +502,9 @@ MINDEX_INFO = {
         ],
         "md5": "",
         "size compressed (bytes)": 0,
-        "documents": 28320920,
+        "documents": 28320920, # 22980699 multi-token formulas
         "corpus_url": "https://drive.google.com/file/d/1rtINvwODOK-YH79OleoVYH90X9W3m1Q_/view?usp=sharing",
+        "corpus_image_minimal_size": "4.9G",
         "downloaded": False
     },
 }
