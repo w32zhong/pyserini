@@ -479,21 +479,21 @@ MINDEX_INFO = {
         "size compressed (bytes)": 156128,
         "documents": 591468,
         "corpus_url": "https://drive.google.com/file/d/1kaNjozKJhDUnCevw4fsrmYdsw8Wixkn2/view?usp=sharing",
-        "index_image_minimal_size": "584M",
+        "image_content_size": "584M",
         "image_filesystem": "reiserfs",
         "downloaded": False
     },
     "arqmath-2020-task1": {
         "description": "CLEF ARQMath 2020 task2 (posts from MSE in the years 2010 to 2018)",
         "urls": [
-            "",
+            "https://www.dropbox.com/s/ofydiw10yf2ursa/arqmath-2020-task1.tar.gz?dl=1",
         ],
-        "md5": "",
-        "size compressed (bytes)": 0,
+        "md5": "6d0894f01bb40c2b06c5300f48d6fc0b",
+        "size compressed (bytes)": 10052984,
         "documents":  1445495, # Number of posts here, there are 1 million documents though.
         "corpus_url": "https://drive.google.com/file/d/1q595qXOdi1eHbC5RxMULMnbtYG4ukK3C/view?usp=sharing",
         "corpus_image_minimal_size": "3G",
-        "index_image_minimal_size": "5.6G",
+        "image_content_size": "5.6G",
         "image_filesystem": "reiserfs",
         "downloaded": False
     },
