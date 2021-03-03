@@ -147,6 +147,10 @@ def check_downloaded(index_name):
         target_index = DINDEX_INFO[index_name]
     else:
         target_index = MINDEX_INFO[index_name]
+
+    # sanity check before accessing target_index['urls'][0]
+    if len(target_index['urls']) == 0:
+        return False
     index_url = target_index['urls'][0]
     index_md5 = target_index['md5']
     index_name = index_url.split('/')[-1]
