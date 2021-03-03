@@ -475,12 +475,12 @@ MINDEX_INFO = {
         "urls": [
             "https://www.dropbox.com/s/uhvkb8hwfjieokd/ntcir12-math-browsing.tar.gz?dl=1",
         ],
-        "image_filesystem": "reiserfs",
         "md5": "c75125fb4b2614719ad4bf982e4cfd5f",
         "size compressed (bytes)": 156128,
         "documents": 591468,
         "corpus_url": "https://drive.google.com/file/d/1kaNjozKJhDUnCevw4fsrmYdsw8Wixkn2/view?usp=sharing",
         "index_image_minimal_size": "584M",
+        "image_filesystem": "reiserfs",
         "downloaded": False
     },
     "arqmath-2020-task1": {
@@ -493,6 +493,8 @@ MINDEX_INFO = {
         "documents":  1445495, # Number of posts here, there are 1 million documents though.
         "corpus_url": "https://drive.google.com/file/d/1q595qXOdi1eHbC5RxMULMnbtYG4ukK3C/view?usp=sharing",
         "corpus_image_minimal_size": "3G",
+        "index_image_minimal_size": "5.6G",
+        "image_filesystem": "reiserfs",
         "downloaded": False
     },
     "arqmath-2020-task2": {

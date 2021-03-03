@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
         # generate run file from specifed topics
         for qid, query in gen_topics_queries(collection):
-            print('[ evaluate ]', qid, query)
+            print('[ query topic ]', qid, query)
 
             # actually run query
             results = searcher.search(query,
@@ -139,7 +139,12 @@ if __name__ == '__main__':
             ret_code = results['ret_code']
             ret_msg = results['ret_str']
             n_hits = len(results['hits']) if ret_code == 0 else 0
-            print(f'[ results ] {ret_msg}(#{ret_code}): {n_hits} hit(s)')
+
+            RED = '\033[31m'
+            RST = '\033[0m'
+            if n_hits == 0: print(RED, end='')
+            print(f'[ result ] {ret_msg}(#{ret_code}): {n_hits} hit(s)')
+            if n_hits == 0: print(RST, end='')
 
             # inject query ID and append temp file to trec_output file
             with open(tmpout, 'r') as temp_fh:
