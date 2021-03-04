@@ -473,13 +473,13 @@ MINDEX_INFO = {
     "ntcir12-math-browsing": {
         "description": "NTCIR-12 Wikipedia dataset",
         "urls": [
-            "https://www.dropbox.com/s/uhvkb8hwfjieokd/ntcir12-math-browsing.tar.gz?dl=1",
+            "https://www.dropbox.com/s/nnr0zuxfluv8c78/ntcir12-math-browsing.tar.gz?dl=1",
         ],
-        "md5": "c75125fb4b2614719ad4bf982e4cfd5f",
-        "size compressed (bytes)": 156128,
+        "md5": "288b14bc4fe3f71277f3159e7cf142be",
+        "size compressed (bytes)": 160120,
         "documents": 591468,
         "corpus_url": "https://drive.google.com/file/d/1kaNjozKJhDUnCevw4fsrmYdsw8Wixkn2/view?usp=sharing",
-        "image_content_size": "584M",
+        "image_content_size": "609M",
         "image_filesystem": "reiserfs",
         "downloaded": False
     },
