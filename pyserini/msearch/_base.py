@@ -8,21 +8,21 @@ from pyserini.util import download_evaluation_script
 
 def _topic_process__ntcir12_math_browsing(line):
     fields = line.split()
-    query = [{'type': 'tex', 'keyword': fields[1]}]
+    query = [{'type': 'tex', 'keyword': ' '.join(fields[1:])}]
     qid = fields[0]
     return qid, query
 
 
 def _topic_process__ntcir12_math_browsing_concrete(line):
     fields = line.split()
-    query = [{'type': 'tex', 'keyword': fields[1]}]
+    query = [{'type': 'tex', 'keyword': ' '.join(fields[1:])}]
     qid = fields[0]
     return qid, query
 
 
 def _topic_process__ntcir12_math_browsing_wildcards(line):
     fields = line.split()
-    query = [{'type': 'tex', 'keyword': fields[1]}]
+    query = [{'type': 'tex', 'keyword': ' '.join(fields[1:])}]
     qid = fields[0]
     return qid, query
 
