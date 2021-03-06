@@ -3,7 +3,7 @@ import sys
 import json
 import numpy
 
-name = 'arqmath-2020-task1'
+name = sys.argv[1] if len(sys.argv) > 1 else 'arqmath-2020-task1'
 accum = numpy.zeros(98)
 
 for i in range(5):

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAME=arqmath-2020-task1
+NAME=${1-"arqmath-2020-task1"}
 
 INDEX=$NAME
 TOPICS=$NAME
@@ -13,6 +13,9 @@ single_run() {
 	python3 ./pyserini/msearch/calc-runtime-stats.py $runtimes > ./runs/$RUN.$num.runtimes
 }
 
-#for i in {1..5}; do single_run $i; done
-overall_runtimes=$(python3 pyserini/msearch/calc-multiple-runtimes-stats.py)
+for i in {1..5}; do
+	echo "run#${i}...";
+	single_run $i;
+done
+overall_runtimes=$(python3 pyserini/msearch/accumulate-multiple-runtimes.py)
 python3 ./pyserini/msearch/calc-runtime-stats.py $overall_runtimes > ./runs/$RUN.overall.runtimes
