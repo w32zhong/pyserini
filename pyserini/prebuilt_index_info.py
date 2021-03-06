@@ -463,11 +463,14 @@ MINDEX_INFO = {
     "mse-ecir2020": {
         "description": "Math Q&A corpus used to evaluate efficiency in ECIR 2020",
         "urls": [
+			"https://www.dropbox.com/s/w1qco7s49oren9y/mse-ecir2020.tar.gz?dl=1"
         ],
-        "md5": "",
-        "size compressed (bytes)": 0,
+        "md5": "35bcbc0f144ff4dd8baf35d439a6cc28",
+        "size compressed (bytes)": 5521996,
         "documents": 1057449,
         "corpus_url": "https://www.cs.rit.edu/~dprl/data/mse-corpus.tar.gz",
+        "image_content_size": "8.2G",
+        "image_filesystem": "reiserfs",
         "downloaded": False
     },
     "ntcir12-math-browsing": {
