@@ -455,7 +455,7 @@ MINDEX_INFO = {
             "https://www.dropbox.com/s/z8hztzdksshrayy/tiny-mse.tar.gz?dl=1"
         ],
         "md5": "cb54659c7059dff42935eb67fb953dc1",
-        "size compressed (bytes)": 686925,
+        "size compressed (bytes)": 703411200,
         "documents": 68,
         "corpus_url": "https://github.com/approach0/search-engine/tree/ecir2020/indexer/test-corpus/mse-small",
         "downloaded": False
@@ -466,7 +466,7 @@ MINDEX_INFO = {
 			"https://www.dropbox.com/s/w1qco7s49oren9y/mse-ecir2020.tar.gz?dl=1"
         ],
         "md5": "35bcbc0f144ff4dd8baf35d439a6cc28",
-        "size compressed (bytes)": 5521996,
+        "size compressed (bytes)": 5654523904,
         "documents": 1057449,
         "corpus_url": "https://www.cs.rit.edu/~dprl/data/mse-corpus.tar.gz",
         "image_content_size": "8.2G",
@@ -479,7 +479,7 @@ MINDEX_INFO = {
             "https://www.dropbox.com/s/s8xr0fi3lmvtxn4/ntcir12-math-browsing.tar.gz?dl=1",
         ],
         "md5": "5312c919ba92cd3fbb4b6de6e43551f3",
-        "size compressed (bytes)": 160052,
+        "size compressed (bytes)": 163893248,
         "documents": 591468,
         "corpus_url": "https://drive.google.com/file/d/1kaNjozKJhDUnCevw4fsrmYdsw8Wixkn2/view?usp=sharing",
         "image_content_size": "609M",
@@ -492,7 +492,7 @@ MINDEX_INFO = {
             "https://www.dropbox.com/s/ofydiw10yf2ursa/arqmath-2020-task1.tar.gz?dl=1",
         ],
         "md5": "6d0894f01bb40c2b06c5300f48d6fc0b",
-        "size compressed (bytes)": 10052984,
+        "size compressed (bytes)": 10294255616,
         "documents":  1445495, # Number of posts here, there are 1 million documents though.
         "corpus_url": "https://drive.google.com/file/d/1q595qXOdi1eHbC5RxMULMnbtYG4ukK3C/view?usp=sharing",
         "corpus_image_minimal_size": "3G",
