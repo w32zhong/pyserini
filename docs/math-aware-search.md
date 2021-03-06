@@ -54,13 +54,15 @@ ls tools/topics-and-qrels/topics.ntcir12-math-browsing*
 
 To download a pre-built index and perform evaluation given `arqmath-2020-task1` as example:
 ```
-python3 -m pyserini.msearch --index arqmath-2020-task1 --eval-math-topics arqmath-2020-task1 --topk 1000 --trec-output arqmath-2020-task1.run --eval-args '-l 2 -J -m map -m P.10'
+python3 -m pyserini.msearch --index arqmath-2020-task1 --eval-math-topics arqmath-2020-task1 --topk 1000 --trec-output arqmath-2020-task1.run --eval-args '-l 2 -J -m map'
 ```
-(here `-l 2 -J -m map -m P.10` will be passed to `trec_eval` to generate evaluation with scores of 2 or higher considered relevant and it reports results using the MAP and P@10 metrics over only the judged hits)
+(here `-l 2 -J -m map` will be passed to `trec_eval` to generate evaluation with scores of 2 or higher considered relevant and it reports results using the MAP metric over only the judged hits)
 
 Alternatively, after a run file is generated, we can directly invoke `trec_eval` to generate evaluation metrics:
 ```
 /tools/eval/trec_eval.9.0.4/trec_eval ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt arqmath-2020-task1.run -J -m ndcg
+/tools/eval/trec_eval.9.0.4/trec_eval ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt arqmath-2020-task1.run -l2 -m P.10
+/tools/eval/trec_eval.9.0.4/trec_eval ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt arqmath-2020-task1.run -l2 -m bpref
 ```
 
 To print index statistics:
