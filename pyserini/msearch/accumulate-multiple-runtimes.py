@@ -4,7 +4,7 @@ import json
 import numpy
 
 name = sys.argv[1] if len(sys.argv) > 1 else 'arqmath-2020-task1'
-accum = numpy.zeros(98)
+accum = None
 
 for i in range(5):
 	run_num = i + 1
@@ -12,8 +12,9 @@ for i in range(5):
 	with open(path, 'r') as fh:
 		j = json.load(fh)
 		runtimes = numpy.array(j['runtimes'])
+		if accum is None:
+			accum = numpy.zeros(runtimes.shape)
 		accum += runtimes
-		#print(runtimes.shape)
 
 accum /= 5
 print(','.join(map(str, accum.tolist())))

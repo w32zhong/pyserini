@@ -95,3 +95,8 @@ $ python3 ./pyserini/msearch/calc-runtime-stats.py 775,364,8,3543,756,494,838,52
 
 ## Automatic Script
 Run `pyserini/msearch/multiple-runs.sh` to generate topic run files under `./runs` directory. Runtimes are averaged over 5 multiple runs.
+
+Example to run `ntcir12-math-browsing-concrete` topics on `mse-ecir2020` index and use K=200:
+```sh
+$ ./pyserini/msearch/multiple-runs.sh mse-ecir2020 ntcir12-math-browsing-concrete 200
+```
