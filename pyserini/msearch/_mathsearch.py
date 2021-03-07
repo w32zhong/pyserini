@@ -26,6 +26,7 @@ from pya0 import index_open as math_index_open
 from pya0 import search as math_search
 from pya0 import index_lookup_doc as math_raw_doc
 from pya0 import index_print_summary
+from pya0 import use_fallback_parser
 
 
 class MathSearcher:
@@ -68,6 +69,10 @@ class MathSearcher:
     @staticmethod
     def list_prebuilt_indexes():
         get_math_indexes_info()
+
+    @staticmethod
+    def use_fallback_parser(use):
+        use_fallback_parser(use)
 
     def print_index_stats(self):
         index_print_summary(self.index)

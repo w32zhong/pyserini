@@ -38,6 +38,8 @@ if __name__ == '__main__':
         help="Output TREC-format results")
     parser.add_argument('--verbose', required=False, action='store_true',
         help="Verbose output (showing query structures and merge times)")
+    parser.add_argument('--use-fallback-parser', required=False, action='store_true',
+        help="Use fallback LaTeXML parser for parsing TeX")
     parser.add_argument('--print-index-stats', required=False,
         action='store_true', help="Print index statistics and abort")
     parser.add_argument('--list-prebuilt-indexes', required=False,
@@ -55,12 +57,18 @@ if __name__ == '__main__':
         exit(0)
 
     # create searcher from specified index path
-    if not os.path.exists(args.index):
+    if args.index is None:
+        print('no index specified')
+    elif not os.path.exists(args.index):
         searcher = MathSearcher.from_prebuilt_index(args.index)
         if searcher is None: # if index name is not registered
             exit(1)
     else:
         searcher = MathSearcher(args.index)
+
+    # enable fallback parser?
+    if args.use_fallback_parser:
+        MathSearcher.use_fallback_parser(True)
 
     # print index stats if requested
     if args.print_index_stats:
