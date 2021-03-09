@@ -500,16 +500,82 @@ MINDEX_INFO = {
         "image_filesystem": "reiserfs",
         "downloaded": False
     },
-    "arqmath-2020-task2": {
-        "description": "CLEF ARQMath 2020 task2 (math formulas from MSE in the years 2010 to 2018)",
+    "arqmath-2020-task2-part1": {
+        "description": "CLEF ARQMath 2020 task2 (math formulas from MSE in the years 2010 to 2018) [part1]",
         "urls": [
-            "",
+            "https://www.dropbox.com/s/79amy930x5cdv5p/arqmath-2020-task2-part1.tar.gz?dl=1",
         ],
-        "md5": "",
-        "size compressed (bytes)": 0,
+        "md5": "f140d94178dad084955ebd646a831a7e",
+        "size compressed (bytes)": 2071553043,
         "documents": 28320920, # 22980699 multi-token formulas
         "corpus_url": "https://drive.google.com/file/d/1rtINvwODOK-YH79OleoVYH90X9W3m1Q_/view?usp=sharing",
         "corpus_image_minimal_size": "4.9G",
+        "image_content_size": "3.0G",
+        "image_filesystem": "reiserfs",
         "downloaded": False
     },
+    "arqmath-2020-task2-part2": {
+        "description": "CLEF ARQMath 2020 task2 (math formulas from MSE in the years 2010 to 2018) [part2]",
+        "urls": [
+            "https://www.dropbox.com/s/8loo9cwmjrua94k/arqmath-2020-task2-part2.tar.gz?dl=1",
+        ],
+        "md5": "05618cddb0131716ee94c26f8419e534",
+        "size compressed (bytes)": 2069404794,
+        "documents": 28320920, # 22980699 multi-token formulas
+        "corpus_url": "https://drive.google.com/file/d/1rtINvwODOK-YH79OleoVYH90X9W3m1Q_/view?usp=sharing",
+        "corpus_image_minimal_size": "4.9G",
+        "image_content_size": "3.0G",
+        "image_filesystem": "reiserfs",
+        "downloaded": False
+    },
+    "arqmath-2020-task2-part3": {
+        "description": "CLEF ARQMath 2020 task2 (math formulas from MSE in the years 2010 to 2018) [part3]",
+        "urls": [
+            "https://www.dropbox.com/s/ky5j2v75melz0ks/arqmath-2020-task2-part3.tar.gz?dl=1",
+        ],
+        "md5": "e155d89feeca5bf7b4b90d1d5844ec26",
+        "size compressed (bytes)": 2050106292,
+        "documents": 28320920, # 22980699 multi-token formulas
+        "corpus_url": "https://drive.google.com/file/d/1rtINvwODOK-YH79OleoVYH90X9W3m1Q_/view?usp=sharing",
+        "corpus_image_minimal_size": "4.9G",
+        "image_content_size": "3.0G",
+        "image_filesystem": "reiserfs",
+        "downloaded": False
+    },
+    "arqmath-2020-task2-part4": {
+        "description": "CLEF ARQMath 2020 task2 (math formulas from MSE in the years 2010 to 2018) [part4]",
+        "urls": [
+            "https://www.dropbox.com/s/d1pxlabjdbojdp0/arqmath-2020-task2-part4.tar.gz?dl=1",
+        ],
+        "md5": "c7d84f05342097b4db28149af4cd1f76",
+        "size compressed (bytes)": 2075163474,
+        "documents": 28320920, # 22980699 multi-token formulas
+        "corpus_url": "https://drive.google.com/file/d/1rtINvwODOK-YH79OleoVYH90X9W3m1Q_/view?usp=sharing",
+        "corpus_image_minimal_size": "4.9G",
+        "image_content_size": "3.0G",
+        "image_filesystem": "reiserfs",
+        "downloaded": False
+    },
+    "ecir2020-a0-arqmath2020-task1": {
+        "description": "To reproduce our submission at ARQMath 2020 for task 1 (with single-token math treated as text)",
+        "urls": [
+            "https://www.dropbox.com/s/3t7pb9axgwq2dku/ecir2020-arqmath-task1.tar.gz?dl=1",
+        ],
+        "md5": "980337363e92bd02eacdb96db1869a27",
+        "size compressed (bytes)": 11193804419,
+        "image_content_size": "13G",
+        "image_filesystem": "reiserfs",
+        "downloaded": False
+	},
+    "ecir2020-a0-mse": {
+        "description": "To reproduce our ECIR2020 efficiency results on ad-hoc MSE corpus",
+        "urls": [
+            "https://www.dropbox.com/s/pgcj96ptskx1l7h/ecir2020-mse.tar.gz?dl=1",
+        ],
+        "md5": "f4193a4b35bb302f2a2382bbf18450d0",
+        "size compressed (bytes)": 9183807154,
+        "image_content_size": "16G",
+        "image_filesystem": "reiserfs",
+        "downloaded": False
+	},
 }
