@@ -1,7 +1,3 @@
-./tools/eval/trec_eval.9.0.4/trec_eval ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./runs/arqmath-2020-task1-K1000.run -qn -J -m ndcg | sort -k 3,3 > a0-ndcg.txt
-
-./tools/eval/trec_eval.9.0.4/trec_eval ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./MathDowsers-task1-alpha05translated-manual-both-A.tsv -qn -J -m ndcg | sort -k 3,3 > mdowsers-ndcg.txt
-
 get_num_judged() {
 	DOCS="$1"
 	QREL=$2
@@ -15,11 +11,15 @@ get_num_judged() {
 }
 
 topic_judged_rate_order_by_score() {
+	TRECEVAL=./tools/eval/trec_eval.9.0.4/trec_eval
 	QREL=$1
 	RUN=$2
-	INPUT=$3
 	tot_judged=0
 	tot_hits=0
+	TMPFILE=$(mktemp)
+
+	$TRECEVAL $QREL $RUN -qn -J -m ndcg | sort -k 3,3 > $TMPFILE
+
 	while read line; do
 		qry=$(echo $line | awk '{print $2}')
 		score=$(echo $line | awk '{print $3}')
@@ -29,11 +29,16 @@ topic_judged_rate_order_by_score() {
 		echo $qry $judged/$hits $score
 		let "tot_judged+=$judged"
 		let "tot_hits+=$hits"
-	done < $INPUT
+	done < $TMPFILE
 	echo "tot_judged=$tot_judged"
 	echo "tot_hits=$tot_hits"
 }
 
-topic_judged_rate_order_by_score ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./runs/arqmath-2020-task1-K1000.run a0-ndcg.txt
+topic_judged_rate_order_by_score ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./MathDowsers-task1-alpha05noReRank-auto-both-A.tsv | tee mdowsers-best.txt
 
-#topic_judged_rate_order_by_score ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./MathDowsers-task1-alpha05translated-manual-both-A.tsv mdowsers-ndcg.txt
+topic_judged_rate_order_by_score ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./MathDowsers-task1-alpha05translated-manual-both-A.tsv | tee mdowsers-manual.txt
+
+topic_judged_rate_order_by_score ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./Approach0.tsv | tee a0-base.txt
+
+topic_judged_rate_order_by_score ./tools/topics-and-qrels/qrels.arqmath-2020-task1.txt ./runs/arqmath-2020-task1-K1000.run | tee pya0.txt
+

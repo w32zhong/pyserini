@@ -8,9 +8,11 @@ K=${3-1000}
 INDEX=$NAME
 RUN="$NAME-K${K}"
 
+#ARGS=--use-fallback-parser
+
 single_run() {
 	num=${1-1}
-	python3 -m pyserini.msearch --index $INDEX --topk $K --eval-math-topics $TOPICS --trec-output ./runs/$RUN.run --verbose > ./runs/$RUN.$num.output
+	python3 -m pyserini.msearch --index $INDEX --topk $K --eval-math-topics $TOPICS --trec-output ./runs/$RUN.run --verbose $ARGS > ./runs/$RUN.$num.output
 	runtimes=$(cat ./runs/$RUN.$num.output | ./pyserini/msearch/collect-runtimes.sh)
 	python3 ./pyserini/msearch/calc-runtime-stats.py $runtimes > ./runs/$RUN.$num.runtimes
 }
