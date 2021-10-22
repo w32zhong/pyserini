@@ -13,7 +13,7 @@ from pyserini.encode import ColBertEncoder
 
 
 class ColBertSearcher:
-    def __init__(self, index_path: str, query_encoder: QueryEncoder, div=5):
+    def __init__(self, index_path: str, query_encoder: QueryEncoder, div=10):
         self.index_path = index_path
         self.encoder = query_encoder
         self.pos2docid = None
@@ -165,6 +165,7 @@ class ColBertSearcher:
         doc_lens = doc_lens[uniq_docids]
         stride = self.max_doc_len
 
+        # split search into segments
         for low, high in div_offsets:
             if self.div > 1:
                 print('embs offset range:', low, high)
@@ -182,12 +183,9 @@ class ColBertSearcher:
             div_uniq_docids = uniq_docids[in_range]
 
             # select documents in this division
-            word_embs = self.word_embs[low:high]
+            word_embs = self.word_embs[low:high + stride]
             word_embs = word_embs.to(self.device)
             view = self._create_view(word_embs, stride)
-            print(word_embs.shape)
-            print(view.shape)
-            print((div_doc_offsets - low).min(), (div_doc_offsets - low).max())
             div_cands = torch.index_select(view, 0, div_doc_offsets - low)
             assert div_cands.shape == (n_div_cands, stride, self.dim)
 
