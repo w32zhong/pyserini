@@ -91,28 +91,27 @@ class ColBertSearcher:
         return sorted(files, key=lambda x: int(x.split('.')[1]))
 
     def get_partial_embs(self, low, high):
-        stride = self.max_doc_len
-        embs = torch.zeros(high - low + stride, self.dim, dtype=torch.float16)
+        embs = torch.zeros(high - low, self.dim, dtype=torch.float16)
         embs_files = r'word_emb\.\d+\.pt'
         fill_offset = 0
         for i, filename in enumerate(self.get_sorted_shards_list(embs_files)):
             path = os.path.join(self.index_path, filename)
             offset = self.shard_offsets[i]
             length = self.shard_lens[i]
-            shard_interval = (offset, offset + length)
-            candi_interval = (low, high + stride)
-            if shard_interval[1] <= candi_interval[0]:
+            shard_int = (offset, offset + length)
+            candi_int = (low, high)
+            if shard_int[1] <= candi_int[0]:
                 continue
-            elif shard_interval[0] >= candi_interval[1]:
+            elif shard_int[0] >= candi_int[1]:
                 break
-            assert shard_interval[0] <= candi_interval[0] + fill_offset
+            assert shard_int[0] <= candi_int[0] + fill_offset
             print('Loading shard embeddings', path)
-            part_embs = torch.load(path)
+            shard_embs = torch.load(path)
 
-            shard_l = candi_interval[0] + fill_offset - shard_interval[0]
-            shard_r = min(shard_interval[1], candi_interval[1]) - shard_interval[0]
+            shard_l = candi_int[0] + fill_offset - shard_int[0]
+            shard_r = min(shard_int[1], candi_int[1]) - shard_int[0]
             fill_len = shard_r - shard_l
-            embs[fill_offset:fill_len] = part_embs[shard_l:shard_r]
+            embs[fill_offset:fill_len] = shard_embs[shard_l:shard_r]
             fill_offset += fill_len
             if fill_offset >= embs.shape[0]:
                 break
@@ -192,7 +191,7 @@ class ColBertSearcher:
             div_uniq_docids = uniq_docids[in_range]
 
             # select documents in this division
-            word_embs = self.get_partial_embs(low, high)
+            word_embs = self.get_partial_embs(low, high + stride)
             word_embs = word_embs.to(self.device)
             view = self._create_view(word_embs, stride)
             div_cands = torch.index_select(view, 0, div_doc_offsets - low)
