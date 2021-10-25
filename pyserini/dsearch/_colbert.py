@@ -64,12 +64,6 @@ class ColBertSearcher:
         assert self.doc_offsets[-1] + self.doc_lens[-1] == self.n_embs
         print('Total documents:', self.n_docs)
 
-        print('Reading flat tensors...')
-        self.word_embs = self.get_embs(self.max_doc_len)
-
-        mem_usage = sys.getsizeof(self.word_embs.storage()) // (1024*1024)
-        print(f'All embs memory usage = {mem_usage:,} MiB on', self.device)
-
     def items_of_shards(self, pattern, fmt='pickle'):
         def load_pickle_items(path):
             with open(path, 'rb') as fh:
@@ -96,17 +90,32 @@ class ColBertSearcher:
         files = list(filter(lambda x: pattern.match(x), files))
         return sorted(files, key=lambda x: int(x.split('.')[1]))
 
-    def get_embs(self, stride):
-        embs = torch.zeros(self.n_embs + stride,
-            self.dim, dtype=torch.float16)
+    def get_partial_embs(self, low, high):
+        stride = self.max_doc_len
+        embs = torch.zeros(high - low + stride, self.dim, dtype=torch.float16)
         embs_files = r'word_emb\.\d+\.pt'
+        fill_offset = 0
         for i, filename in enumerate(self.get_sorted_shards_list(embs_files)):
             path = os.path.join(self.index_path, filename)
-            print('Loading', path)
-            part_embs = torch.load(path)
             offset = self.shard_offsets[i]
             length = self.shard_lens[i]
-            embs[offset : offset + length] = part_embs
+            shard_interval = (offset, offset + length)
+            candi_interval = (low, high + stride)
+            if shard_interval[1] <= candi_interval[0]:
+                continue
+            elif shard_interval[0] >= candi_interval[1]:
+                break
+            assert shard_interval[0] <= candi_interval[0] + fill_offset
+            print('Loading shard embeddings', path)
+            part_embs = torch.load(path)
+
+            shard_l = candi_interval[0] + fill_offset - shard_interval[0]
+            shard_r = min(shard_interval[1], candi_interval[1]) - shard_interval[0]
+            fill_len = shard_r - shard_l
+            embs[fill_offset:fill_len] = part_embs[shard_l:shard_r]
+            fill_offset += fill_len
+            if fill_offset >= embs.shape[0]:
+                break
         return embs
 
     def _create_view(self, embs, stride):
@@ -183,7 +192,7 @@ class ColBertSearcher:
             div_uniq_docids = uniq_docids[in_range]
 
             # select documents in this division
-            word_embs = self.word_embs[low:high + stride]
+            word_embs = self.get_partial_embs(low, high)
             word_embs = word_embs.to(self.device)
             view = self._create_view(word_embs, stride)
             div_cands = torch.index_select(view, 0, div_doc_offsets - low)
