@@ -111,8 +111,9 @@ class ColBertSearcher:
             shard_l = candi_int[0] + fill_offset - shard_int[0]
             shard_r = min(shard_int[1], candi_int[1]) - shard_int[0]
             fill_len = shard_r - shard_l
-            embs[fill_offset:fill_len] = shard_embs[shard_l:shard_r]
-            fill_offset += fill_len
+            fill_end = fill_offset + fill_len
+            embs[fill_offset:fill_end] = shard_embs[shard_l:shard_r]
+            fill_offset = fill_end
             if fill_offset >= embs.shape[0]:
                 break
         return embs
