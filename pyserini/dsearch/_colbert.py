@@ -252,8 +252,8 @@ class ColBertSearcher:
             scores = scores.max(1).values.sum(-1) # scoring
             all_scores[in_range] = scores
 
-            print('Q', qcode)
-            print('D', div_cands)
+            print('Q', qcode.shape, '\n', qcode)
+            print('D', qcode.shape, '\n', div_cands)
 
             # release in-loop temp memory
             del word_embs
