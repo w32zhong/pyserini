@@ -253,7 +253,7 @@ class ColBertSearcher:
             all_scores[in_range] = scores
 
             print('Q', qcode.shape, '\n', qcode)
-            print('D', qcode.shape, '\n', div_cands)
+            print('D', div_cands.shape, '\n', div_cands)
 
             # release in-loop temp memory
             del word_embs
