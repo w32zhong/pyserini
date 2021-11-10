@@ -100,8 +100,8 @@ class JsonlCollectionIterator:
             with open(filename) as f:
                 for line in tqdm(f):
                     info = json.loads(line)
-                    all_info['id'].append(str(info['id']))
-                    fields_info = info['contents'].rstrip().split('\n')
+                    all_info['id'].append(str(info['docid']))
+                    fields_info = info['text'].rstrip().split('\n')
                     for i in range(len(fields_info)):
                         all_info[self.fields[i]].append(fields_info[i])
         return all_info
