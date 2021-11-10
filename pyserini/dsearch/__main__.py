@@ -210,6 +210,8 @@ if __name__ == '__main__':
         batch_topics = list()
         batch_topic_ids = list()
         for index, (topic_id, text) in enumerate(tqdm(query_iterator, total=len(topics.keys()))):
+            if topic_id != 188714:
+                continue
             if args.batch_size <= 1 and args.threads <= 1:
                 if PRF_FLAG:
                     emb_q, prf_candidates = searcher.search(text, k=args.prf_depth, return_vector=True, **kwargs)

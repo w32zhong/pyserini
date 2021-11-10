@@ -1,0 +1,3 @@
+python -m pyserini.encode input --corpus ./collections/debug/ encoder --encoder ./encoders/colbert_distil_128/ --tokenizer ./encoders/tokenizer-distilbert-base-uncased/ --batch 32 --fp16 --device cuda:0 output --embeddings indexes/debug
+python -m pyserini.dsearch --topics msmarco-passage-dev-subset --index ./indexes/debug/ --encoder ./encoders/colbert_distil_128 --tokenizer ./encoders/tokenizer-distilbert-base-uncased/ --output runs/tmp.run --device cuda:0
+cat runs/tmp.run
