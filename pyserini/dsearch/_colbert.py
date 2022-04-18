@@ -34,7 +34,11 @@ class ColBertSearcher:
         path = os.path.join(self.index_path, 'word_emb.faiss')
         self.faiss_index = faiss.read_index(path)
         self.dim = self.faiss_index.d
-        self.code_sz = self.faiss_index.code_size
+        if hasattr(self.faiss_index, 'code_size'):
+            self.code_sz = self.faiss_index.code_size
+        else:
+            # Flat index may not have code_size
+            self.code_sz = 16
         self.n_embs = self.faiss_index.ntotal
         print(f'dim={self.dim}, code_sz={self.code_sz}')
         print(f'Total embedding vectors: {self.n_embs:,}')

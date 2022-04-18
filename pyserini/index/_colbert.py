@@ -83,8 +83,8 @@ class ColBertIndexer:
             n_words = faiss_index.ntotal
             print(f'Added: {n_words} words.')
 
-        print('Writing flat faiss index ...')
-        path = os.path.join(self.index_path, f'word_emb.{i}.faiss')
+        path = os.path.join(self.index_path, f'word_emb.faiss')
+        print('Writing flat faiss index to:', path)
         faiss.write_index(faiss_index, path)
 
         print('Simple Checking ...')
