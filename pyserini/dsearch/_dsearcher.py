@@ -32,8 +32,8 @@ from transformers.file_utils import is_faiss_available, requires_backends
 
 from pyserini.util import (download_encoded_queries, download_prebuilt_index,
                            get_dense_indexes_info, get_sparse_index)
-from pyserini.search import SimpleSearcher
-from pyserini.index import Document
+#from pyserini.search import SimpleSearcher
+#from pyserini.index import Document
 
 from ._model import AnceEncoder
 import torch
@@ -484,7 +484,7 @@ class SimpleDenseSearcher:
         docids = self.load_docids(docid_path)
         return index, docids
 
-    def doc(self, docid: Union[str, int]) -> Optional[Document]:
+    def doc(self, docid: Union[str, int]):
         """Return the :class:`Document` corresponding to ``docid``. Since dense indexes don't store documents
         but sparse indexes do, route over to corresponding sparse index (according to prebuilt_index_info.py)
         and use its doc API 
