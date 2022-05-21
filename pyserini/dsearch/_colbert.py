@@ -1,14 +1,17 @@
 import os
 import re
 import sys
-import time
 import pickle
 import torch
 import faiss
+import json
+import time
 import argparse
 import itertools
+import statistics
 from tqdm import tqdm
 from typing import List
+from collections import defaultdict
 from pyserini.dsearch import DenseSearchResult, QueryEncoder
 from pyserini.encode import ColBertEncoder
 
@@ -20,6 +23,9 @@ class ColBertSearcher:
         self.encoder = query_encoder
         self.pos2docid = None
         self.device = device
+
+        # time deltas
+        self.time_deltas = defaultdict(list)
 
         if search_range is None:
             div, div_selection = 1, slice(None)
@@ -216,6 +222,7 @@ class ColBertSearcher:
         return ext_docIDs
 
     def colbert_rank(self, qcode, uniq_docids):
+        start = time.time()
         # prepare query and document tensors
         Q = qcode.permute(0, 2, 1).to(self.device) # [qnum, dim, max_qlen]
         Q = Q.to(dtype=torch.float16) # float16
@@ -232,13 +239,22 @@ class ColBertSearcher:
         doc_offsets = self.doc_offsets[uniq_docids]
         doc_lens = self.doc_lens[uniq_docids]
 
+        self.time_deltas['prepare_rank'].append(time.time() - start)
+
         # split search into segments
         for low, high in self.div_offsets:
+            # select documents in this division
+            print(f'Loading embs offset [{low:,}:{high:,}] to {self.device}')
+            start = time.time()
+            word_embs = self.word_embs[low - lowest : high + stride - lowest]
+            word_embs = word_embs.to(self.device)
+            self.time_deltas['load2gpu'].append(time.time() - start)
+
             # selecting word embeddings in this division
+            start = time.time()
             in_range = torch.logical_and(
                 low <= doc_offsets, doc_offsets < high
             )
-
             div_doc_offsets = doc_offsets[in_range]
             n_div_cands = div_doc_offsets.shape[0]
             if n_div_cands == 0:
@@ -246,13 +262,12 @@ class ColBertSearcher:
             div_doc_lens = doc_lens[in_range]
             div_uniq_docids = uniq_docids[in_range]
 
-            # select documents in this division
-            print(f'Loading embs offset [{low:,}:{high:,}] to {self.device}')
-            word_embs = self.word_embs[low - lowest : high + stride - lowest]
-            word_embs = word_embs.to(self.device)
             view = self._create_view(word_embs, stride)
             div_cands = torch.index_select(view, 0, div_doc_offsets - low)
             assert div_cands.shape == (n_div_cands, stride, self.dim)
+            self.time_deltas['select_embs'].append(time.time() - start)
+
+            start = time.time()
 
             # create mask tensor for filtering out doc padding words
             mask = torch.arange(stride, device=self.device) # doc word offsets
@@ -265,10 +280,14 @@ class ColBertSearcher:
             scores = scores.float() # convert to full precision for max()
             all_scores[in_range] = scores.max(1).values.sum(-1) # scoring
 
+            self.time_deltas['gpu_compute'].append(time.time() - start)
+
             # release in-loop temp memory
+            start = time.time()
             del word_embs
             del view
             torch.cuda.empty_cache()
+            self.time_deltas['release'].append(time.time() - start)
 
             # debug embedding
             if self.debug_docid is not None:
@@ -279,6 +298,26 @@ class ColBertSearcher:
                 #pdb.set_trace()
 
         return all_scores.cpu().tolist()
+
+    def report(self, report_filename='colbert_time_report.txt'):
+        report = defaultdict(dict)
+        for key in self.time_deltas:
+            runtimes = self.time_deltas[key]
+            output = report[key]
+            output['avg'] = statistics.mean(runtimes)
+            output['med'] = statistics.median(runtimes)
+            output['max'] = max(runtimes)
+            output['min'] = min(runtimes)
+            output['len'] = len(runtimes)
+            if len(runtimes) >= 2:
+                output['std'] = statistics.stdev(runtimes)
+            for key in output:
+                output[key] = round(output[key], 3) # to milli-seconds
+        print('ColBertSearcher report:', report)
+        output_json = json.dumps(report, sort_keys=True, indent=4)
+        with open(report_filename, 'w') as fh:
+            fh.write(output_json)
+            fh.write('\n')
 
     def search(self, query: str, k: int = 10) \
         -> List[DenseSearchResult]:
@@ -293,6 +332,7 @@ class ColBertSearcher:
         assert dim == self.dim
         assert qnum == 1
 
+        start = time.time()
         # retrieve candidates per keyword
         if self.debug_docid is not None:
             uniq_docids = [[self.debug_docid]]
@@ -304,11 +344,15 @@ class ColBertSearcher:
             QD_docids = self.pos2docid[QD_embpos] # [qnum, max_qlen*cand_depth]
             # rank candidates
             uniq_docids = list(map(lambda x: list(set(x)), QD_docids.tolist()))
+        self.time_deltas['faiss'].append(time.time() - start)
 
         # rank candidates with colbert scoring
+        start = time.time()
         scores = self.colbert_rank(qcode, uniq_docids[0])
+        self.time_deltas['rerank'].append(time.time() - start)
 
         # sort results
+        start = time.time()
         results = zip(uniq_docids[0], scores)
         results = sorted(results, key=lambda x: x[1], reverse=True)
         results = results[:k] # only extract top-K results
@@ -317,6 +361,7 @@ class ColBertSearcher:
             for i, score in results
             if score != 0
         ]
+        self.time_deltas['sort'].append(time.time() - start)
         return results
 
 
