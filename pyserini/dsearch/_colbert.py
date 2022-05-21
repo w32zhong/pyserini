@@ -84,8 +84,8 @@ class ColBertSearcher:
         print(f'Total documents: {self.n_docs:,}')
 
         # big tensor memory preloading
-        self.doc_offsets = torch.tensor(self.doc_offsets, device=device)
-        self.doc_lens = torch.tensor(self.doc_lens, device=device)
+        self.doc_offsets = torch.tensor(self.doc_offsets)
+        self.doc_lens = torch.tensor(self.doc_lens)
         self.all_div_offsets = self.get_div_offsets(self.doc_offsets, div)
         self.div_offsets = self.all_div_offsets[div_selection]
 
@@ -211,16 +211,6 @@ class ColBertSearcher:
             div_offsets.append((low, high))
         return div_offsets
 
-    def get_div_extdocids(self):
-        ext_docIDs = [[] for _ in self.div_offsets]
-        for k, (low, high) in enumerate(self.div_offsets):
-            low_docid = (self.doc_offsets==low).nonzero().item()
-            high_docid = (self.doc_offsets==high).nonzero().item()
-            for docid in range(low_docid, high_docid + 1):
-                ext_docid = self.ext_docIDs[docid]
-                ext_docIDs[k].append(ext_docid)
-        return ext_docIDs
-
     def colbert_rank(self, qcode, uniq_docids):
         start = time.time()
         # prepare query and document tensors
@@ -244,13 +234,6 @@ class ColBertSearcher:
         # split search into segments
         for low, high in self.div_offsets:
             # select documents in this division
-            print(f'Loading embs offset [{low:,}:{high:,}] to {self.device}')
-            start = time.time()
-            word_embs = self.word_embs[low - lowest : high + stride - lowest]
-            word_embs = word_embs.to(self.device)
-            self.time_deltas['load2gpu'].append(time.time() - start)
-
-            # selecting word embeddings in this division
             start = time.time()
             in_range = torch.logical_and(
                 low <= doc_offsets, doc_offsets < high
@@ -262,16 +245,25 @@ class ColBertSearcher:
             div_doc_lens = doc_lens[in_range]
             div_uniq_docids = uniq_docids[in_range]
 
+            # selecting word embeddings in this division
+            print(f'Loading embs offset [{low:,}:{high:,}]', end=" ")
+            word_embs = self.word_embs[low - lowest : high + stride - lowest]
             view = self._create_view(word_embs, stride)
-            div_cands = torch.index_select(view, 0, div_doc_offsets - low)
-            assert div_cands.shape == (n_div_cands, stride, self.dim)
+            select_idx = div_doc_offsets - low
+            div_cands = torch.index_select(view, 0, select_idx)
+            print('candidates:', div_cands.shape[0])
             self.time_deltas['select_embs'].append(time.time() - start)
 
             start = time.time()
+            div_cands = div_cands.to(self.device) # move to device
+            assert div_cands.shape == (n_div_cands, stride, self.dim)
+            self.time_deltas['load2gpu'].append(time.time() - start)
 
+            start = time.time()
             # create mask tensor for filtering out doc padding words
-            mask = torch.arange(stride, device=self.device) # doc word offsets
+            mask = torch.arange(stride) # doc word offsets
             mask = (mask.unsqueeze(0) < div_doc_lens.unsqueeze(-1))
+            mask = mask.to(self.device)
             assert mask.shape == (n_div_cands, stride)
 
             # apply ColBert scoring function
@@ -284,8 +276,9 @@ class ColBertSearcher:
 
             # release in-loop temp memory
             start = time.time()
-            del word_embs
+            del div_cands
             del view
+            del word_embs
             torch.cuda.empty_cache()
             self.time_deltas['release'].append(time.time() - start)
 
