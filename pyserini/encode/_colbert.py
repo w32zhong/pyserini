@@ -42,7 +42,7 @@ class ColBERT(BertPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.dim = 128
-        self.bert = BertModel(config, add_pooling_layer=True)
+        self.bert = BertModel(config, add_pooling_layer=False)
         self.linear = nn.Linear(config.hidden_size, self.dim, bias=False)
         self.skiplist = dict()
         self.init_weights()
@@ -80,20 +80,25 @@ class ColBERT(BertPreTrainedModel):
         lengths = inputs['attention_mask'].sum(1).cpu().numpy()
         return torch.nn.functional.normalize(D, p=2, dim=2), lengths
 
-    def score(self, Q, D, mask):
-        # (B, Ld, dim) x (B, dim, Lq) -> (B, Ld, Lq)
-        cmp_matrix = D @ Q.permute(0, 2, 1)
+    def score(self, Q, D, mask, in_batch_negs):
+        Q = Q.permute(0, 2, 1)
+        if in_batch_negs:
+            D = D.unsqueeze(1)
+            mask = mask.unsqueeze(1)
+        # inference: (B, Ld, dim) x (B, dim, Lq) -> (B, Ld, Lq)
+        # in-batch negs: (B, 1, Ld, dim) x (B/2, dim, Lq) -> (B, B/2, Ld, Lq)
+        cmp_matrix = D @ Q
         # only mask doc dim, query dim will be filled with [MASK]s
-        cmp_matrix = cmp_matrix * mask # [B, Ld, Lq]
-        best_match = cmp_matrix.max(1).values # best match per query
+        cmp_matrix = cmp_matrix * mask
+        best_match = cmp_matrix.max(-2).values # best match per query
         scores = best_match.sum(-1) # sum score over each query
         return scores, cmp_matrix
 
-    def forward(self, Q, D):
+    def forward(self, Q, D, in_batch_negs=False):
         q_reps, _ = self.query(Q)
         d_reps, _ = self.doc(D)
-        d_mask = D['attention_mask'].unsqueeze(-1)
-        return self.score(q_reps, d_reps, d_mask)
+        d_mask = D['attention_mask'].unsqueeze(-1) # [B, Ld, 1]
+        return self.score(q_reps, d_reps, d_mask, in_batch_negs=in_batch_negs)
 
 
 class ColBERT_distil(DistilBertPreTrainedModel):
